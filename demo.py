@@ -68,7 +68,7 @@ turbo = Turbo(app)
 @app.before_first_request
 def before_first_request():
     #resetting time stamp file to 0
-    file = open("simple-webframe/pos.txt","w") 
+    file = open("pos.txt","w") 
     file.write(str(0))
     file.close()
 
@@ -78,12 +78,12 @@ def before_first_request():
 @app.context_processor
 def inject_load():
     # getting previous time stamp
-    file = open("simple-webframe/pos.txt","r")
+    file = open("pos.txt","r")
     pos = int(file.read())
     file.close()
 
     # writing next time stamp
-    file = open("simple-webframe/pos.txt","w")
+    file = open("pos.txt","w")
     file.write(str(pos+interval))
     file.close()
 
