@@ -8,6 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 from audioPractice import printWAV
 import time, random, threading
 from turbo_flask import Turbo
+from flask import Flask
+from flask_bcrypt import Bcrypt
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '6899aed57fc9a147782e72f9bde1ed9a'
@@ -21,8 +23,8 @@ class User(db.Model):
   email = db.Column(db.String(120), unique=True, nullable=False)
   password = db.Column(db.String(60), nullable=False)
 
-def __repr__(self):
-  return f"User('{self.username}', '{self.email}')"
+  def __repr__(self):
+    return f"User('{self.username}', '{self.email}', '{self.password}')"
 
 @app.route("/")
 def hello_world():
@@ -45,15 +47,20 @@ def second_page():
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    bcrypt = Bcrypt(app)
     form = RegistrationForm()
     if form.validate_on_submit(): # checks if entries are valid
-        user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+      
+        pw_hash = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+
+        user = User(username=form.username.data, email=form.email.data, password=pw_hash)
         db.session.add(user)
         db.session.commit()
         flash(f'Account created for {form.username.data}!', 'success')
         return redirect(url_for('home')) # if so - send to home page
     return render_template('register.html', title='Register', form=form) 
 
+  
 interval = 10
 FILE_NAME = 'Have_A_Dream.wav'
 turbo = Turbo(app)
