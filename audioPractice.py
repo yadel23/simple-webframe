@@ -1,7 +1,6 @@
 import speech_recognition as sr
 from os import path
 
-ex = 'Have_A_Dream.wav'
 
 def printWAV(file_name, pos, clip):
     AUDIO_FILE = path.join(path.dirname(path.realpath(__file__)), "static/"+file_name)

@@ -26,11 +26,8 @@ class User(db.Model):
   def __repr__(self):
     return f"User('{self.username}', '{self.email}', '{self.password}')"
 
-@app.route("/")
-def hello_world():
-    return '<p> Hello World!!! </p>'
- 
 
+@app.route('/')
 @app.route('/home')
 def home():
   return render_template('home.html', subtitle = 'Home Page subtitle')
@@ -73,7 +70,7 @@ def before_first_request():
     file.close()
 
     #starting thread that will time updates
-    threading.Thread(target=update_captions).start()
+    threading.Thread(target=update_captions, daemon=True).start()
 
 @app.context_processor
 def inject_load():
