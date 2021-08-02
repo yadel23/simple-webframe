@@ -22,6 +22,7 @@ jobs:
           pip3 install flask-bcrypt
           pip3 install SpeechRecognition
           pip3 install turbo-flask
+          pip3 install pytest
 
       - name: Test webpages
         run: |
